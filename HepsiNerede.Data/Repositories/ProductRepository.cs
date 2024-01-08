@@ -6,7 +6,7 @@ namespace HepsiNerede.Data.Repositories
     public interface IProductRepository
     {
         Product? GetProductByCode(string productCode);
-        Product AddProduct(Product product);
+        Product CreateProduct(Product product);
     }
 
     public class ProductRepository : IProductRepository
@@ -25,7 +25,7 @@ namespace HepsiNerede.Data.Repositories
             .FirstOrDefault(p => p.ProductCode == productCode);
         }
 
-        public Product AddProduct(Product product)
+        public Product CreateProduct(Product product)
         {
             product.CreatedAt = DateTime.Now;
             _dbContext.Add(product);

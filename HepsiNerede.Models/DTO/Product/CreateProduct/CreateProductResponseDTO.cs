@@ -1,6 +1,6 @@
-﻿namespace HepsiNerede.Models.DTO.Product.AddProduct
+﻿namespace HepsiNerede.Models.DTO.Product.CreateProduct
 {
-    public class AddProductResponseDTO
+    public class CreateProductResponseDTO
     {
         public string ProductCode { get; set; }
         public decimal Price { get; set; }

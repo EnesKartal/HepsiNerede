@@ -1,5 +1,4 @@
-using HepsiNerede.Data.Entities;
-using HepsiNerede.Models.DTO.Product.AddProduct;
+using HepsiNerede.Models.DTO.Product.CreateProduct;
 using HepsiNerede.Models.DTO.Product.GetProduct;
 using HepsiNerede.Services;
 using HepsiNerede.WebApp.Common;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HepsiNerede.WebApp.Controllers
 {
     [ApiController]
-    [Route("api/product")]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -32,15 +31,15 @@ namespace HepsiNerede.WebApp.Controllers
             return Ok(new ApiResponse<GetProductResponseDTO>(new GetProductResponseDTO { Price = product.Price, Stock = product.Stock }, message: $"Product {productCode} info"));
         }
 
-        [HttpPost("addProduct")]
-        public ActionResult<ApiResponse<AddProductResponseDTO>> AddProduct([FromBody] AddProductRequestDTO product)
+        [HttpPost("createProduct")]
+        public ActionResult<ApiResponse<CreateProductResponseDTO>> CreateProduct([FromBody] CreateProductRequestDTO product)
         {
             if (product == null)
                 return BadRequest("Product is required.");
 
-            var createdProduct = _productService.AddProduct(product);
+            var createdProduct = _productService.CreateProduct(product);
 
-            return Ok(new ApiResponse<AddProductResponseDTO>(new AddProductResponseDTO { Price = createdProduct.Price, ProductCode = createdProduct.ProductCode, Stock = createdProduct.Stock }, message: "Product created"));
+            return Ok(new ApiResponse<CreateProductResponseDTO>(new CreateProductResponseDTO { Price = createdProduct.Price, ProductCode = createdProduct.ProductCode, Stock = createdProduct.Stock }, message: "Product created"));
         }
     }
 }
