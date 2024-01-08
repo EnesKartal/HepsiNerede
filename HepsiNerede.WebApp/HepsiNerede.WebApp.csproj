@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HepsiNerede.Data\HepsiNerede.Data.csproj" />
+    <ProjectReference Include="..\HepsiNerede.Models\HepsiNerede.Models.csproj" />
+    <ProjectReference Include="..\HepsiNerede.Services\HepsiNerede.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,13 @@
 ﻿using HepsiNerede.Data.Entities;
 using HepsiNerede.Data.Repositories;
+using HepsiNerede.Models.DTO;
 
 namespace HepsiNerede.Services
 {
     public interface IProductService
     {
         Product? GetProductByCode(string productCode);
-        void AddProduct(string productCode, decimal price, int stock);
+        Product AddProduct(AddProductDTO addProductDTO);
     }
 
     public class ProductService : IProductService
@@ -23,16 +24,16 @@ namespace HepsiNerede.Services
             return _productRepository.GetProductByCode(productCode);
         }
 
-        public void AddProduct(string productCode, decimal price, int stock)
+        public Product AddProduct(AddProductDTO addProductDTO)
         {
             var newProduct = new Product
             {
-                ProductCode = productCode,
-                Price = price,
-                Stock = stock
+                ProductCode = addProductDTO.ProductCode,
+                Price = addProductDTO.Price,
+                Stock = addProductDTO.Stock
             };
 
-            _productRepository.AddProduct(newProduct);
+            return _productRepository.AddProduct(newProduct);
         }
     }
 }

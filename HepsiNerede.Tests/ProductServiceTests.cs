@@ -13,7 +13,7 @@ namespace HepsiNerede.Tests
             var productRepositoryMock = new Mock<IProductRepository>();
             var productService = new ProductService(productRepositoryMock.Object);
 
-            productService.AddProduct("P001", 100.0m, 50);
+            productService.AddProduct(new Models.DTO.AddProductDTO { ProductCode = "P001", Price = 100.0m, Stock = 50 });
 
             productRepositoryMock.Verify(repo => repo.AddProduct(It.IsAny<Product>()), Times.Once);
         }
