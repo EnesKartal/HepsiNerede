@@ -6,7 +6,7 @@ namespace HepsiNerede.Data.Repositories
     public interface ICampaignRepository
     {
         Campaign? GetCampaignByName(string name);
-        void AddCampaign(Campaign product);
+        Campaign CreateCampaign(Campaign product);
     }
 
     public class CampaignRepository : ICampaignRepository
@@ -25,11 +25,12 @@ namespace HepsiNerede.Data.Repositories
             .FirstOrDefault(p => p.Name == name);
         }
 
-        public void AddCampaign(Campaign campaign)
+        public Campaign CreateCampaign(Campaign campaign)
         {
             campaign.CreatedAt = DateTime.Now;
             _dbContext.Campaigns.Add(campaign);
             _dbContext.SaveChanges();
+            return campaign;
         }
     }
 }

@@ -23,9 +23,9 @@ namespace HepsiNerede.Tests
                 Id = 1
             };
 
-            campaignService.AddCampaign(campaign.Name, campaign.ProductCode, campaign.PriceManipulationLimit, campaign.TargetSalesCount, campaign.Duration);
+            campaignService.CreateCampaign(campaign.Name, campaign.ProductCode, campaign.PriceManipulationLimit, campaign.TargetSalesCount, campaign.Duration);
 
-            campaignRepositoryMock.Verify(repo => repo.AddCampaign(It.IsAny<Campaign>()), Times.Once);
+            campaignRepositoryMock.Verify(repo => repo.CreateCampaign(It.IsAny<Campaign>()), Times.Once);
         }
     }
 }

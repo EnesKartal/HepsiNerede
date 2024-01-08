@@ -1,11 +1,13 @@
 ﻿using HepsiNerede.Data.Entities;
 using HepsiNerede.Data.Repositories;
+using HepsiNerede.Models.DTO.Campaign.CreateCampaign;
 
 namespace HepsiNerede.Services
 {
     public interface ICampaignService
     {
-        void AddCampaign(string name, string productCode, decimal priceManipulationLimit, decimal targetSaleCount, int duration);
+        Campaign CreateCampaign(CreateCampaignRequestDTO createCampaignRequestDTO);
+        Campaign? GetCampaignByName(string name);
     }
 
     public class CampaignService : ICampaignService
@@ -17,18 +19,24 @@ namespace HepsiNerede.Services
             _campaignRepository = campaignRepository;
         }
 
-        public void AddCampaign(string name, string productCode, decimal priceManipulationLimit, decimal targetSaleCount, int duration)
+        public Campaign? GetCampaignByName(string name)
+        {
+            return _campaignRepository.GetCampaignByName(name);
+        }
+
+        public Campaign CreateCampaign(CreateCampaignRequestDTO createCampaignRequestDTO)
         {
             var newCampaign = new Campaign
             {
-                Name = name,
-                ProductCode = productCode,
-                Duration = duration,
-                PriceManipulationLimit = priceManipulationLimit,
-                TargetSalesCount = targetSaleCount,
+                Name = createCampaignRequestDTO.Name,
+                ProductCode = createCampaignRequestDTO.ProductCode,
+                Duration = createCampaignRequestDTO.Duration,
+                PriceManipulationLimit = createCampaignRequestDTO.PMLimit,
+                TargetSalesCount = createCampaignRequestDTO.TSCount,
             };
 
-            _campaignRepository.AddCampaign(newCampaign);
+            return _campaignRepository.CreateCampaign(newCampaign);
         }
+
     }
 }

@@ -21,9 +21,9 @@ namespace HepsiNerede.WebApp.Controllers
             if (order == null)
                 return BadRequest("Order is required.");
 
-            var createdProduct = _orderService.CreateOrder(order);
+            var createdOrder = _orderService.CreateOrder(order);
 
-            return Ok(new ApiResponse<CreateOrderResponseDTO>(new CreateOrderResponseDTO { Product = createdProduct.ProductCode, Quantity = createdProduct.Quantity }, message: "Order created"));
+            return Ok(new ApiResponse<CreateOrderResponseDTO>(new CreateOrderResponseDTO { Product = createdOrder.ProductCode, Quantity = createdOrder.Quantity }, message: "Order created"));
         }
     }
 }
