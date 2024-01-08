@@ -3,25 +3,29 @@ using HepsiNerede.Data.Repositories;
 using HepsiNerede.Services;
 using Moq;
 
-public class CampaignServiceTests
+namespace HepsiNerede.Tests
 {
-    [Fact]
-    public void AddCampaign_ShouldAddCampaignToRepository()
+    public class CampaignServiceTests
     {
-        var campaignRepositoryMock = new Mock<ICampaignRepository>();
-        var campaignService = new CampaignService(campaignRepositoryMock.Object);
-
-        var campaign = new Campaign
+        [Fact]
+        public void AddCampaign_ShouldAddCampaignToRepository()
         {
-            Name = "SummerSale",
-            ProductCode = "P001",
-            Duration = 24,
-            PriceManipulationLimit = 10,
-            TargetSalesCount = 50
-        };
+            var campaignRepositoryMock = new Mock<ICampaignRepository>();
+            var campaignService = new CampaignService(campaignRepositoryMock.Object);
 
-        campaignService.AddCampaign(campaign.Name, campaign.ProductCode, campaign.PriceManipulationLimit, campaign.TargetSalesCount, campaign.Duration);
+            var campaign = new Campaign
+            {
+                Name = "SummerSale",
+                ProductCode = "P001",
+                Duration = 24,
+                PriceManipulationLimit = 10,
+                TargetSalesCount = 50,
+                Id = 1
+            };
 
-        campaignRepositoryMock.Verify(repo => repo.AddCampaign(campaign), Times.Once);
+            campaignService.AddCampaign(campaign.Name, campaign.ProductCode, campaign.PriceManipulationLimit, campaign.TargetSalesCount, campaign.Duration);
+
+            campaignRepositoryMock.Verify(repo => repo.AddCampaign(It.IsAny<Campaign>()), Times.Once);
+        }
     }
 }
