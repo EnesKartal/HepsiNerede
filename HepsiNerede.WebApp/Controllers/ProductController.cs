@@ -1,40 +1,46 @@
-using HepsiNerede.Models.DTO;
+using HepsiNerede.Data.Entities;
+using HepsiNerede.Models.DTO.Product.AddProduct;
+using HepsiNerede.Models.DTO.Product.GetProduct;
 using HepsiNerede.Services;
+using HepsiNerede.WebApp.Common;
 using Microsoft.AspNetCore.Mvc;
 
-[ApiController]
-[Route("api/product")]
-public class ProductController : ControllerBase
+namespace HepsiNerede.WebApp.Controllers
 {
-    private readonly IProductService _productService;
-
-    public ProductController(IProductService productService)
+    [ApiController]
+    [Route("api/product")]
+    public class ProductController : ControllerBase
     {
-        _productService = productService;
-    }
+        private readonly IProductService _productService;
 
-    [HttpGet("getProductByCode")]
-    public IActionResult GetProductByCode([FromQuery] string? productCode)
-    {
-        if (string.IsNullOrEmpty(productCode))
-            return BadRequest("Product code is required.");
+        public ProductController(IProductService productService)
+        {
+            _productService = productService;
+        }
 
-        var product = _productService.GetProductByCode(productCode);
+        [HttpGet("getProductByCode")]
+        public ActionResult<ApiResponse<GetProductResponseDTO>> GetProductByCode([FromQuery] string? productCode)
+        {
+            if (string.IsNullOrEmpty(productCode))
+                return BadRequest("Product code is required.");
 
-        if (product == null)
-            return NotFound($"Product with code '{productCode}' not found.");
+            var product = _productService.GetProductByCode(productCode);
 
-        return Ok(product);
-    }
+            if (product == null)
+                return NotFound($"Product with code '{productCode}' not found.");
 
-    [HttpPost("addProduct")]
-    public IActionResult AddProduct([FromBody] AddProductDTO product)
-    {
-        if (product == null)
-            return BadRequest("Product is required.");
+            return Ok(new ApiResponse<GetProductResponseDTO>(new GetProductResponseDTO { Price = product.Price, Stock = product.Stock }, message: $"Product {productCode} info"));
+        }
 
-        var createdProduct = _productService.AddProduct(product);
+        [HttpPost("addProduct")]
+        public ActionResult<ApiResponse<AddProductResponseDTO>> AddProduct([FromBody] AddProductRequestDTO product)
+        {
+            if (product == null)
+                return BadRequest("Product is required.");
 
-        return Ok(createdProduct);
+            var createdProduct = _productService.AddProduct(product);
+
+            return Ok(new ApiResponse<AddProductResponseDTO>(new AddProductResponseDTO { Price = createdProduct.Price, ProductCode = createdProduct.ProductCode, Stock = createdProduct.Stock }, message: "Product created"));
+        }
     }
 }

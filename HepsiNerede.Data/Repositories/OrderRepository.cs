@@ -16,9 +16,10 @@ namespace HepsiNerede.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public void AddOrder(Order Order)
+        public void AddOrder(Order order)
         {
-            _dbContext.Orders.Add(Order);
+            order.CreatedAt = DateTime.Now;
+            _dbContext.Orders.Add(order);
             _dbContext.SaveChanges();
         }
     }

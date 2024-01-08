@@ -27,6 +27,7 @@ namespace HepsiNerede.Data.Repositories
 
         public void AddCampaign(Campaign campaign)
         {
+            campaign.CreatedAt = DateTime.Now;
             _dbContext.Campaigns.Add(campaign);
             _dbContext.SaveChanges();
         }

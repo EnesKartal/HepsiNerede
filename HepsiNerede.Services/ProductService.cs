@@ -1,13 +1,13 @@
 ﻿using HepsiNerede.Data.Entities;
 using HepsiNerede.Data.Repositories;
-using HepsiNerede.Models.DTO;
+using HepsiNerede.Models.DTO.Product.AddProduct;
 
 namespace HepsiNerede.Services
 {
     public interface IProductService
     {
         Product? GetProductByCode(string productCode);
-        Product AddProduct(AddProductDTO addProductDTO);
+        Product AddProduct(AddProductRequestDTO addProductDTO);
     }
 
     public class ProductService : IProductService
@@ -24,7 +24,7 @@ namespace HepsiNerede.Services
             return _productRepository.GetProductByCode(productCode);
         }
 
-        public Product AddProduct(AddProductDTO addProductDTO)
+        public Product AddProduct(AddProductRequestDTO addProductDTO)
         {
             var newProduct = new Product
             {

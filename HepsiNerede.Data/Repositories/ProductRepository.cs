@@ -27,6 +27,7 @@ namespace HepsiNerede.Data.Repositories
 
         public Product AddProduct(Product product)
         {
+            product.CreatedAt = DateTime.Now;
             _dbContext.Add(product);
             _dbContext.SaveChanges();
             return product;
