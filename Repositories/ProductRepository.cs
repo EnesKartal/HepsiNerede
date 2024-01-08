@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 public interface IProductRepository
 {
     Product? GetProductByCode(string productCode);
@@ -6,20 +8,23 @@ public interface IProductRepository
 
 public class ProductRepository : IProductRepository
 {
-    private readonly List<Product> _products;
+    private readonly HepsiNeredeDBContext _dbContext;
 
-    public ProductRepository()
+    public ProductRepository(HepsiNeredeDBContext dbContext)
     {
-        _products = new List<Product>();
+        _dbContext = dbContext;
     }
 
     public Product? GetProductByCode(string productCode)
     {
-        return _products.FirstOrDefault(p => p.ProductCode == productCode);
+        return _dbContext.Products
+        .AsNoTracking()
+        .FirstOrDefault(p => p.ProductCode == productCode);
     }
 
     public void AddProduct(Product product)
     {
-        _products.Add(product);
+        _dbContext.Add(product);
+        _dbContext.SaveChanges();
     }
 }

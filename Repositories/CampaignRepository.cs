@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 public interface ICampaignRepository
 {
     Campaign? GetCampaignByName(string name);
@@ -6,20 +8,23 @@ public interface ICampaignRepository
 
 public class CampaignRepository : ICampaignRepository
 {
-    private readonly List<Campaign> _campaigns;
+    private readonly HepsiNeredeDBContext _dbContext;
 
-    public CampaignRepository()
+    public CampaignRepository(HepsiNeredeDBContext dbContext)
     {
-        _campaigns = new List<Campaign>();
+        _dbContext = dbContext;
     }
 
     public Campaign? GetCampaignByName(string name)
     {
-        return _campaigns.FirstOrDefault(p => p.Name == name);
+        return _dbContext.Campaigns
+        .AsNoTracking()
+        .FirstOrDefault(p => p.Name == name);
     }
 
     public void AddCampaign(Campaign campaign)
     {
-        _campaigns.Add(campaign);
+        _dbContext.Campaigns.Add(campaign);
+        _dbContext.SaveChanges();
     }
 }

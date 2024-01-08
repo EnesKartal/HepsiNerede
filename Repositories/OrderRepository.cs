@@ -5,15 +5,16 @@ public interface IOrderRepository
 
 public class OrderRepository : IOrderRepository
 {
-    private readonly List<Order> _orders;
+    private readonly HepsiNeredeDBContext _dbContext;
 
-    public OrderRepository()
+    public OrderRepository(HepsiNeredeDBContext dbContext)
     {
-        _orders = new List<Order>();
+        _dbContext = dbContext;
     }
 
     public void AddOrder(Order Order)
     {
-        _orders.Add(Order);
+        _dbContext.Orders.Add(Order);
+        _dbContext.SaveChanges();
     }
 }
