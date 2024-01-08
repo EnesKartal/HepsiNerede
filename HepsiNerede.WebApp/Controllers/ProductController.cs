@@ -39,7 +39,7 @@ namespace HepsiNerede.WebApp.Controllers
 
             var createdProduct = _productService.CreateProduct(product);
 
-            return Ok(new ApiResponse<CreateProductResponseDTO>(new CreateProductResponseDTO { Price = createdProduct.Price, ProductCode = createdProduct.ProductCode, Stock = createdProduct.Stock }, message: "Product created"));
+            return Ok(new ApiResponse<CreateProductResponseDTO>(new CreateProductResponseDTO { Price = createdProduct.Price, Code = createdProduct.ProductCode, Stock = createdProduct.Stock }, message: "Product created"));
         }
     }
 }

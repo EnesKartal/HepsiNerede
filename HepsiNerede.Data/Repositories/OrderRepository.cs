@@ -4,7 +4,7 @@ namespace HepsiNerede.Data.Repositories
 {
     public interface IOrderRepository
     {
-        void AddOrder(Order product);
+        Order CreateOrder(Order product);
     }
 
     public class OrderRepository : IOrderRepository
@@ -16,11 +16,12 @@ namespace HepsiNerede.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public void AddOrder(Order order)
+        public Order CreateOrder(Order order)
         {
             order.CreatedAt = DateTime.Now;
             _dbContext.Orders.Add(order);
             _dbContext.SaveChanges();
+            return order;
         }
     }
 }

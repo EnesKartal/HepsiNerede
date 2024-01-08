@@ -1,11 +1,12 @@
 ﻿using HepsiNerede.Data.Entities;
 using HepsiNerede.Data.Repositories;
+using HepsiNerede.Models.DTO.Order;
 
 namespace HepsiNerede.Services
 {
     public interface IOrderService
     {
-        void AddOrder(string productCode, decimal quantity);
+        Order CreateOrder(CreateOrderRequestDTO createOrderRequestDTO);
     }
 
     public class OrderService : IOrderService
@@ -17,15 +18,15 @@ namespace HepsiNerede.Services
             _orderRepository = orderRepository;
         }
 
-        public void AddOrder(string productCode, decimal quantity)
+        public Order CreateOrder(CreateOrderRequestDTO createOrderRequestDTO)
         {
             var newOrder = new Order
             {
-                ProductCode = productCode,
-                Quantity = quantity
+                ProductCode = createOrderRequestDTO.ProductCode,
+                Quantity = createOrderRequestDTO.Quantity
             };
 
-            _orderRepository.AddOrder(newOrder);
+            return _orderRepository.CreateOrder(newOrder);
         }
     }
 }

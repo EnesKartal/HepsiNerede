@@ -2,7 +2,7 @@
 {
     public class CreateProductResponseDTO
     {
-        public string ProductCode { get; set; }
+        public string Code { get; set; }
         public decimal Price { get; set; }
         public decimal Stock { get; set; }
     }
