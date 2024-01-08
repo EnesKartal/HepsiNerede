@@ -11,7 +11,6 @@ namespace HepsiNerede.Tests
         [Fact]
         public void GetCampaignByName_ShouldReturnCampaign_WhenCampaignExists()
         {
-            // Arrange
             var campaignRepositoryMock = new Mock<ICampaignRepository>();
             var campaignService = new CampaignService(campaignRepositoryMock.Object);
 
@@ -27,10 +26,8 @@ namespace HepsiNerede.Tests
 
             campaignRepositoryMock.Setup(repo => repo.GetCampaignByName("SummerSale")).Returns(expectedCampaign);
 
-            // Act
             var actualCampaign = campaignService.GetCampaignByName("SummerSale");
 
-            // Assert
             Assert.NotNull(actualCampaign);
             Assert.Equal(expectedCampaign.Name, actualCampaign.Name);
             Assert.Equal(expectedCampaign.ProductCode, actualCampaign.ProductCode);
@@ -44,14 +41,11 @@ namespace HepsiNerede.Tests
         [Fact]
         public void GetCampaignByName_ShouldReturnNull_WhenCampaignDoesNotExist()
         {
-            // Arrange
             var campaignRepositoryMock = new Mock<ICampaignRepository>();
             var campaignService = new CampaignService(campaignRepositoryMock.Object);
 
-            // Act
             var actualCampaign = campaignService.GetCampaignByName("NonExistingCampaign");
 
-            // Assert
             Assert.Null(actualCampaign);
 
             campaignRepositoryMock.Verify(repo => repo.GetCampaignByName("NonExistingCampaign"), Times.Once);
@@ -60,7 +54,6 @@ namespace HepsiNerede.Tests
         [Fact]
         public void CreateCampaign_ShouldCreateCampaignAndReturnIt()
         {
-            // Arrange
             var campaignRepositoryMock = new Mock<ICampaignRepository>();
             var campaignService = new CampaignService(campaignRepositoryMock.Object);
 
@@ -75,10 +68,8 @@ namespace HepsiNerede.Tests
 
             campaignRepositoryMock.Setup(repo => repo.CreateCampaign(It.IsAny<Campaign>())).Returns<Campaign>(c => c);
 
-            // Act
             var createdCampaign = campaignService.CreateCampaign(createCampaignRequest);
 
-            // Assert
             Assert.NotNull(createdCampaign);
             Assert.Equal(createCampaignRequest.Name, createdCampaign.Name);
             Assert.Equal(createCampaignRequest.ProductCode, createdCampaign.ProductCode);

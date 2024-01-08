@@ -1,9 +1,21 @@
 ﻿namespace HepsiNerede.WebApp.Common
 {
+    public class ApiResponse
+    {
+        public string? Message { get; set; }
+        public bool Success { get; set; }
+
+        public ApiResponse(bool success = true, string? message = null)
+        {
+            this.Message = message;
+            this.Success = success;
+        }
+    }
+    
     public class ApiResponse<T>
     {
         public string? Message { get; set; }
-        public T Data { get; set; }
+        public T? Data { get; set; }
         public bool Success { get; set; }
 
         public ApiResponse(T data, bool success = true, string? message = null)

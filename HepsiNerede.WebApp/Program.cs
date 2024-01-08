@@ -23,6 +23,8 @@ builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
+builder.Services.AddSingleton<ITimeSimulationService, TimeSimulationService>();
+
 builder.Services.AddSwaggerGen();
 
 
