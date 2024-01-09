@@ -12,7 +12,7 @@ using HepsiNerede.Infrastructure.Repositories;
 using HepsiNerede.Tests.Helpers;
 using Moq;
 
-namespace HepsiNerede.Tests
+namespace HepsiNerede.Tests.Services
 {
     public class ProductServiceTests
     {

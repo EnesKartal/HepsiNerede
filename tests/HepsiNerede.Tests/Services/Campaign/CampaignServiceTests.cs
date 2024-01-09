@@ -3,14 +3,13 @@ using HepsiNerede.Application.Services.Campaign;
 using HepsiNerede.Application.Services.Order;
 using HepsiNerede.Application.Services.TimeSimulation;
 using HepsiNerede.Domain.Aggregates.CampaignAggregate;
-using HepsiNerede.Domain.Aggregates.OrderAggregate;
 using HepsiNerede.Domain.Entities;
 using HepsiNerede.Infrastructure.Repositories;
 using HepsiNerede.Tests.Helpers;
 using Moq;
 using System.Diagnostics;
 
-namespace HepsiNerede.Tests
+namespace HepsiNerede.Tests.Services
 {
     public class CampaignServiceTests
     {

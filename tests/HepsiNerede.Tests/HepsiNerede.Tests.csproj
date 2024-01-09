@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\src\HepsiNerede.Application\HepsiNerede.Application.csproj" />
     <ProjectReference Include="..\..\src\HepsiNerede.Domain\HepsiNerede.Domain.csproj" />
     <ProjectReference Include="..\..\src\HepsiNerede.Infrastructure\HepsiNerede.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\HepsiNerede.WebApp\HepsiNerede.WebApp.csproj" />
   </ItemGroup>
 
 </Project>

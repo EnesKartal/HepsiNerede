@@ -1,6 +1,6 @@
 ﻿using HepsiNerede.Application.Services.TimeSimulation;
 
-namespace HepsiNerede.Tests
+namespace HepsiNerede.Tests.Services
 {
     public class TimeSimulationServiceTests
     {

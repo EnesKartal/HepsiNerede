@@ -3,7 +3,6 @@ using HepsiNerede.Application.DTOs.Product.GetProduct;
 using HepsiNerede.Application.Services.Product;
 using HepsiNerede.WebApp.Common;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace HepsiNerede.WebApp.Controllers
 {

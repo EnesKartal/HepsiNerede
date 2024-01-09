@@ -1,7 +1,6 @@
 ﻿using HepsiNerede.Application.Services.TimeSimulation;
 using HepsiNerede.WebApp.Common;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace HepsiNerede.WebApp.Controllers
 {

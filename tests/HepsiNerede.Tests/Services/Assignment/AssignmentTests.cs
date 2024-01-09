@@ -1,17 +1,14 @@
-using System.Diagnostics;
 using HepsiNerede.Application.DTOs.Campaign.CreateCampaign;
 using HepsiNerede.Application.DTOs.Product.CreateProduct;
 using HepsiNerede.Application.Services.Campaign;
 using HepsiNerede.Application.Services.Order;
 using HepsiNerede.Application.Services.Product;
 using HepsiNerede.Application.Services.TimeSimulation;
-using HepsiNerede.Domain.Aggregates.OrderAggregate;
-using HepsiNerede.Domain.Aggregates.ProductAggregate;
 using HepsiNerede.Infrastructure.Repositories;
 using HepsiNerede.Tests.Helpers;
 using Xunit.Abstractions;
 
-namespace HepsiNerede.Tests
+namespace HepsiNerede.Tests.Services
 {
     public class AssignmentTests
     {
@@ -30,13 +27,13 @@ namespace HepsiNerede.Tests
             var dbContextMock = DBContextHelper.GetDbContext();
             var productRepository = new ProductRepository(dbContextMock);
             var campaignRepository = new CampaignRepository(dbContextMock);
-            this.timeSimulationService = new TimeSimulationService();
-            var orderService = new OrderService(new OrderRepository(dbContextMock), this.timeSimulationService);
+            timeSimulationService = new TimeSimulationService();
+            var orderService = new OrderService(new OrderRepository(dbContextMock), timeSimulationService);
 
-            this.campaignService = new CampaignService(campaignRepository, timeSimulationService);
-            this.campaignOrderService = new CampaignOrderService(campaignService, orderService);
-            this.productService = new ProductService(productRepository, timeSimulationService);
-            this.productCampaignService = new ProductCampaignService(productRepository, campaignService);
+            campaignService = new CampaignService(campaignRepository, timeSimulationService);
+            campaignOrderService = new CampaignOrderService(campaignService, orderService);
+            productService = new ProductService(productRepository, timeSimulationService);
+            productCampaignService = new ProductCampaignService(productRepository, campaignService);
         }
 
         [Fact]
@@ -122,7 +119,7 @@ namespace HepsiNerede.Tests
             var product = await productCampaignService.GetProductByCodeAsync(createdProduct.ProductCode);
             var currentCampaign = await campaignService.GetActiveCampaignDiscountPercentageForProductAsync(product.ProductCode);
 
-            decimal priceForAssert = currentCampaign > 0 ? Math.Round(createdProduct.Price - (createdProduct.Price * currentCampaign), 4) : createdProduct.Price;
+            decimal priceForAssert = currentCampaign > 0 ? Math.Round(createdProduct.Price - createdProduct.Price * currentCampaign, 4) : createdProduct.Price;
 
             Assert.NotNull(product);
             Assert.Equal(createdProduct.ProductCode, product.ProductCode);
