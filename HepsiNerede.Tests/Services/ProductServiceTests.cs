@@ -76,6 +76,7 @@ namespace HepsiNerede.Tests
 
             var productResult = productRepositoryMock.Object.GetProductByCode(createProductRequestDTO.ProductCode);
 
+            Assert.NotNull(productResult);
             Assert.NotNull(createdProduct);
             Assert.Equal(createProductRequestDTO.ProductCode, productResult.ProductCode);
             Assert.Equal(createProductRequestDTO.Price, productResult.Price);
@@ -119,6 +120,8 @@ namespace HepsiNerede.Tests
                 .Returns<string>(campaignName =>
                 {
                     var campaign = campaignRepository.GetCampaignByName(campaignName);
+                    if (campaign == null)
+                        return null;
                     return new GetCampaignResponseDTO
                     {
                         TargetSales = campaign.TargetSalesCount
@@ -135,34 +138,36 @@ namespace HepsiNerede.Tests
                     {
                         campaignDiscountPercentages[i] = new GetActiveCampaignsAndDiscountPercentagesDTO
                         {
-                            ProductCode= campaigns[i].ProductCode,
+                            ProductCode = campaigns[i].ProductCode,
                             DiscountPercentage = campaigns[i].PriceManipulationLimit
                         };
                     }
                     return campaignDiscountPercentages;
                 });
 
-            campaignServiceMock.Setup(x=> x.GetActiveCampaignDiscountPercentageForProduct(It.IsAny<string>()))
+            campaignServiceMock.Setup(x => x.GetActiveCampaignDiscountPercentageForProduct(It.IsAny<string>()))
                 .Returns<string>(productCode =>
                 {
                     var campaign = campaignRepository.GetActiveCampaignForProduct(productCode, timeSimulationServiceMock.Object.GetCurrentTime());
+                    if (campaign == null)
+                        return 0;
                     return campaignServiceMock.Object.GetDiscountPercentage(campaign);
                 });
-            
+
             campaignServiceMock.Setup(x => x.GetDiscountPercentage(It.IsAny<Campaign>()))
                 .Returns<Campaign>(campaign =>
                 {
-                    if(campaign == null)
+                    if (campaign == null)
                         return 0;
-                        var currentTime = timeSimulationServiceMock.Object.GetCurrentTime();
-                        var timePassed = currentTime - campaign.CreatedAt;
-                        decimal percentage = (decimal)(timePassed.TotalHours * 5);
-                        if (percentage > campaign.PriceManipulationLimit)
-                            percentage = campaign.PriceManipulationLimit;
-                        if (percentage < 0)
-                            percentage = 0;
+                    var currentTime = timeSimulationServiceMock.Object.GetCurrentTime();
+                    var timePassed = currentTime - campaign.CreatedAt;
+                    decimal percentage = (decimal)(timePassed.TotalHours * 5);
+                    if (percentage > campaign.PriceManipulationLimit)
+                        percentage = campaign.PriceManipulationLimit;
+                    if (percentage < 0)
+                        percentage = 0;
 
-                        return percentage / 100;
+                    return percentage / 100;
                 });
 
             var orderServiceMock = new Mock<IOrderService>();
@@ -194,6 +199,7 @@ namespace HepsiNerede.Tests
             var productResult = productService.GetProductByCode(createProductRequestDTO.ProductCode);
 
             Assert.NotNull(createdProduct);
+            Assert.NotNull(productResult);
             Assert.Equal(createProductRequestDTO.ProductCode, productResult.ProductCode);
             Assert.Equal(createProductRequestDTO.Price, productResult.Price);
             Assert.Equal(createProductRequestDTO.Stock, productResult.Stock);

@@ -8,7 +8,7 @@ namespace HepsiNerede.Data.Repositories
         Campaign? GetCampaignByName(string name);
         Campaign CreateCampaign(Campaign product);
         Campaign[] GetActiveCampaigns(DateTime simulatedDate);
-        Campaign GetActiveCampaignForProduct(string productCode, DateTime simulatedDate);
+        Campaign? GetActiveCampaignForProduct(string productCode, DateTime simulatedDate);
     }
 
     public class CampaignRepository : ICampaignRepository
@@ -42,7 +42,7 @@ namespace HepsiNerede.Data.Repositories
             .ToArray();
         }
 
-        public Campaign GetActiveCampaignForProduct(string productCode, DateTime simulatedDate)
+        public Campaign? GetActiveCampaignForProduct(string productCode, DateTime simulatedDate)
         {
             return _dbContext.Campaigns
             .AsNoTracking()
