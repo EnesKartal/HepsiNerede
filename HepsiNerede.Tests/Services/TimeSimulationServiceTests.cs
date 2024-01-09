@@ -1,6 +1,4 @@
-﻿using HepsiNerede.Data.Repositories;
-using HepsiNerede.Services;
-using Moq;
+﻿using HepsiNerede.Services;
 
 namespace HepsiNerede.Tests
 {
@@ -11,7 +9,8 @@ namespace HepsiNerede.Tests
         {
 
             var timeSimulationService = new TimeSimulationService();
-            var expectedTime = new DateTime(2024, 1, 1, 0, 0, 0);
+            var dateTimeNow = DateTime.Now;
+            var expectedTime = new DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, 0, 0, 0);
 
             var currentTime = timeSimulationService.GetCurrentTime();
 
@@ -19,13 +18,14 @@ namespace HepsiNerede.Tests
         }
 
         [Theory]
-        [InlineData(1, 2024, 1, 1, 1, 0, 0)]
-        [InlineData(3, 2024, 1, 1, 3, 0, 0)]
-        public void IncreaseTime_ShouldReturnCorrectTimeAfterIncrease(int hours, int year, int month, int day, int hour, int minute, int second)
+        [InlineData(1)]
+        [InlineData(3)]
+        public void IncreaseTime_ShouldReturnCorrectTimeAfterIncrease(int hours)
         {
             var timeSimulationService = new TimeSimulationService();
 
-            var expectedTime = new DateTime(year, month, day, hour, minute, second);
+            var dateTimeNow = DateTime.Now;
+            var expectedTime = new DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, hours, 0, 0);
 
             var increasedTime = timeSimulationService.IncreaseTime(hours);
 
