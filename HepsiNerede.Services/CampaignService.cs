@@ -3,6 +3,7 @@ using HepsiNerede.Data.Repositories;
 using HepsiNerede.Models.DTO.Campaign.CreateCampaign;
 using HepsiNerede.Models.DTO.Product.GetActiveCampaignsAndDiscountPercentages;
 using HepsiNerede.Models.DTO.Product.GetProduct;
+using System.Diagnostics;
 
 namespace HepsiNerede.Services
 {
@@ -12,6 +13,7 @@ namespace HepsiNerede.Services
         GetCampaignResponseDTO? GetCampaignByName(string name);
         decimal GetActiveCampaignDiscountPercentageForProduct(string productCode);
         GetActiveCampaignsAndDiscountPercentagesDTO[] GetActiveCampaignsAndDiscountPercentages();
+        public decimal GetDiscountPercentage(Campaign campaign);
     }
 
     public class CampaignService : ICampaignService
@@ -92,6 +94,7 @@ namespace HepsiNerede.Services
         public decimal GetActiveCampaignDiscountPercentageForProduct(string productCode)
         {
             var campaign = _campaignRepository.GetActiveCampaignForProduct(productCode, _timeSimulationService.GetCurrentTime());
+            Debug.WriteLine(_timeSimulationService.GetCurrentTime());
             if (campaign == null)
                 return -1;
 
@@ -99,7 +102,7 @@ namespace HepsiNerede.Services
         }
 
 
-        private decimal GetDiscountPercentage(Campaign campaign)
+        public decimal GetDiscountPercentage(Campaign campaign)
         {
             //TODO: Reduce complexity
             var currentTime = _timeSimulationService.GetCurrentTime();

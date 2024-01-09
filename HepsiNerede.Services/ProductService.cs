@@ -32,9 +32,9 @@ namespace HepsiNerede.Services
         public Product? GetProductByCode(string productCode)
         {
             decimal discountPercentage = _campaignService.GetActiveCampaignDiscountPercentageForProduct(productCode);
+           
             Product? product = _productRepository.GetProductByCode(productCode);
-            Debug.WriteLine(discountPercentage);
-            System.Console.WriteLine(discountPercentage);
+
             if (product != null && discountPercentage > 0)
                 product.Price = Math.Round(product.Price - (product.Price * discountPercentage), 4);
 
