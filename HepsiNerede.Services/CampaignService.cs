@@ -110,9 +110,6 @@ namespace HepsiNerede.Services
             if (percentage < 0)
                 percentage = 0;
 
-            Console.WriteLine("timePassed.TotalHours");
-            Console.WriteLine(timePassed.TotalHours);
-            System.Console.WriteLine("CurrentTime: " + currentTime + " - Campaign Created At: " + campaign.CreatedAt + " - Time Passed: " + timePassed + " - Percentage: " + percentage + " - PriceManipulationLimit: " + campaign.PriceManipulationLimit);
             return percentage / 100;
         }
     }
