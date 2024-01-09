@@ -12,7 +12,8 @@ namespace HepsiNerede.Tests
         public void AddOrder_ShouldAddOrderToRepository()
         {
             var orderRepositoryMock = new Mock<IOrderRepository>();
-            var orderService = new OrderService(orderRepositoryMock.Object);
+            var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
+            var orderService = new OrderService(orderRepositoryMock.Object, timeSimulationServiceMock.Object);
 
             orderService.CreateOrder(new CreateOrderRequestDTO { ProductCode = "P001", Quantity = 5 });
 

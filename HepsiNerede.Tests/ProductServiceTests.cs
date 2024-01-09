@@ -12,7 +12,9 @@ namespace HepsiNerede.Tests
         public void CreateProduct_ShouldCreateProductToRepository()
         {
             var productRepositoryMock = new Mock<IProductRepository>();
-            var productService = new ProductService(productRepositoryMock.Object);
+            var campaignServiceMock = new Mock<ICampaignService>();
+            var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
+            var productService = new ProductService(productRepositoryMock.Object, campaignServiceMock.Object, timeSimulationServiceMock.Object);
 
             productService.CreateProduct(new CreateProductRequestDTO { ProductCode = "P001", Price = 100.0m, Stock = 50 });
 

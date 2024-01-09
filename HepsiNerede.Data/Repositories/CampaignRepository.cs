@@ -7,6 +7,8 @@ namespace HepsiNerede.Data.Repositories
     {
         Campaign? GetCampaignByName(string name);
         Campaign CreateCampaign(Campaign product);
+        Campaign[] GetActiveCampaigns(DateTime simulatedDate);
+        Campaign GetActiveCampaignForProduct(string productCode, DateTime simulatedDate);
     }
 
     public class CampaignRepository : ICampaignRepository
@@ -27,10 +29,24 @@ namespace HepsiNerede.Data.Repositories
 
         public Campaign CreateCampaign(Campaign campaign)
         {
-            campaign.CreatedAt = DateTime.Now;
             _dbContext.Campaigns.Add(campaign);
             _dbContext.SaveChanges();
             return campaign;
+        }
+
+        public Campaign[] GetActiveCampaigns(DateTime simulatedDate)
+        {
+            return _dbContext.Campaigns
+            .AsNoTracking()
+            .Where(c => c.CreatedAt.AddHours(c.Duration) > simulatedDate)
+            .ToArray();
+        }
+
+        public Campaign GetActiveCampaignForProduct(string productCode, DateTime simulatedDate)
+        {
+            return _dbContext.Campaigns
+            .AsNoTracking()
+            .FirstOrDefault(c => c.ProductCode == productCode && c.CreatedAt.AddHours(c.Duration) > simulatedDate);
         }
     }
 }

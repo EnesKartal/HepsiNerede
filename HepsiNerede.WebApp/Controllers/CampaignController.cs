@@ -28,14 +28,7 @@ namespace HepsiNerede.WebApp.Controllers
             if (campaign == null)
                 return NotFound($"Campaign with name '{name}' not found.");
 
-            return Ok(new ApiResponse<GetCampaignResponseDTO>(new GetCampaignResponseDTO
-            {
-                AverageItemPrice = -1,
-                Status = false,
-                TargetSales = -1,
-                TotalSales = -1,
-                Turnover = -1
-            }, message: $"Campaign {name} info"));
+            return Ok(new ApiResponse<GetCampaignResponseDTO>(campaign, message: $"Campaign {name} info"));
         }
 
         [HttpPost("createCampaign")]

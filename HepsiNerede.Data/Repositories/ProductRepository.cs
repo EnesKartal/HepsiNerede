@@ -7,6 +7,8 @@ namespace HepsiNerede.Data.Repositories
     {
         Product? GetProductByCode(string productCode);
         Product CreateProduct(Product product);
+        void DecreaseProductStock(string productCode, decimal quantity);
+        void DecreaseProductPrice(string productCode, decimal price);
     }
 
     public class ProductRepository : IProductRepository
@@ -27,10 +29,23 @@ namespace HepsiNerede.Data.Repositories
 
         public Product CreateProduct(Product product)
         {
-            product.CreatedAt = DateTime.Now;
             _dbContext.Add(product);
             _dbContext.SaveChanges();
             return product;
+        }
+
+        public void DecreaseProductStock(string productCode, decimal quantity)
+        {
+            var product = _dbContext.Products.FirstOrDefault(p => p.ProductCode == productCode);
+            product.Stock -= quantity;
+            _dbContext.SaveChanges();
+        }
+
+        public void DecreaseProductPrice(string productCode, decimal discountPercentage)
+        {
+            var product = _dbContext.Products.FirstOrDefault(p => p.ProductCode == productCode);
+            product.Price -= product.Price * (discountPercentage / 100);
+            _dbContext.SaveChanges();
         }
     }
 }

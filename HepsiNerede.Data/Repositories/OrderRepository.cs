@@ -5,6 +5,7 @@ namespace HepsiNerede.Data.Repositories
     public interface IOrderRepository
     {
         Order CreateOrder(Order product);
+        Order[] GetOrdersForCampaignProduct(string productCode, DateTime campaignEndTime);
     }
 
     public class OrderRepository : IOrderRepository
@@ -18,10 +19,14 @@ namespace HepsiNerede.Data.Repositories
 
         public Order CreateOrder(Order order)
         {
-            order.CreatedAt = DateTime.Now;
             _dbContext.Orders.Add(order);
             _dbContext.SaveChanges();
             return order;
+        }
+
+        public Order[] GetOrdersForCampaignProduct(string productCode, DateTime campaignEndTime)
+        {
+            return _dbContext.Orders.Where(x => x.ProductCode == productCode && x.CreatedAt <= campaignEndTime).ToArray();
         }
     }
 }

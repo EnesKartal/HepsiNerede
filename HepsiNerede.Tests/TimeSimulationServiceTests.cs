@@ -1,4 +1,6 @@
-﻿using HepsiNerede.Services;
+﻿using HepsiNerede.Data.Repositories;
+using HepsiNerede.Services;
+using Moq;
 
 namespace HepsiNerede.Tests
 {
@@ -7,6 +9,7 @@ namespace HepsiNerede.Tests
         [Fact]
         public void GetCurrentTime_ShouldReturnInitialTime()
         {
+
             var timeSimulationService = new TimeSimulationService();
             var expectedTime = new DateTime(2024, 1, 1, 0, 0, 0);
 
@@ -21,6 +24,7 @@ namespace HepsiNerede.Tests
         public void IncreaseTime_ShouldReturnCorrectTimeAfterIncrease(int hours, int year, int month, int day, int hour, int minute, int second)
         {
             var timeSimulationService = new TimeSimulationService();
+
             var expectedTime = new DateTime(year, month, day, hour, minute, second);
 
             var increasedTime = timeSimulationService.IncreaseTime(hours);
