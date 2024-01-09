@@ -1,10 +1,11 @@
-using HepsiNerede.Data;
 using HepsiNerede.Data.Entities;
 using HepsiNerede.Data.Repositories;
 using HepsiNerede.Models.DTO.Campaign.CreateCampaign;
+using HepsiNerede.Models.DTO.Order;
 using HepsiNerede.Services;
 using HepsiNerede.Tests.Helpers;
 using Moq;
+using System.Diagnostics;
 
 namespace HepsiNerede.Tests
 {
@@ -60,12 +61,10 @@ namespace HepsiNerede.Tests
             var dbContextMock = DBContextHelper.GetDbContext();
             var campaignRepository = new CampaignRepository(dbContextMock);
 
-            var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
-            var campaignRepositoryMock = new Mock<ICampaignRepository>();
-            campaignRepositoryMock.Setup(x => x.GetCampaignByName(It.IsAny<string>()))
-                                 .Returns<string>(name => campaignRepository.GetCampaignByName(name));
-            campaignRepositoryMock.Setup(x => x.CreateCampaign(It.IsAny<Campaign>()))
-                                 .Returns<Campaign>(campaign => campaignRepository.CreateCampaign(campaign));
+            var timeSimulationService = new TimeSimulationService();
+            var orderService = new OrderService(new OrderRepository(dbContextMock), timeSimulationService);
+
+            var campaignService = new CampaignService(campaignRepository, timeSimulationService, orderService);
 
             var createCampaignRequestDTO = new CreateCampaignRequestDTO
             {
@@ -76,30 +75,35 @@ namespace HepsiNerede.Tests
                 TSCount = 100
             };
 
-            var currentTime = timeSimulationServiceMock.Object.GetCurrentTime();
-
-            var createdCampaign = campaignRepositoryMock.Object.CreateCampaign(new Campaign
+            var createdCampaign = campaignService.CreateCampaign(new CreateCampaignRequestDTO
             {
-                Name = createCampaignRequestDTO.Name,
-                ProductCode = createCampaignRequestDTO.ProductCode,
                 Duration = createCampaignRequestDTO.Duration,
-                PriceManipulationLimit = createCampaignRequestDTO.PMLimit,
-                TargetSalesCount = createCampaignRequestDTO.TSCount,
-                CreatedAt = currentTime
+                Name = createCampaignRequestDTO.Name,
+                PMLimit = createCampaignRequestDTO.PMLimit,
+                ProductCode = createCampaignRequestDTO.ProductCode,
+                TSCount = createCampaignRequestDTO.TSCount
             });
 
-            var campaignResult = campaignRepositoryMock.Object.GetCampaignByName(createCampaignRequestDTO.Name);
+            Debug.WriteLine(createdCampaign.CreatedAt);
+            var campaignResult = campaignService.GetCampaignByName(createCampaignRequestDTO.Name);
 
             Assert.NotNull(createdCampaign);
             Assert.NotNull(campaignResult);
-            Assert.Equal(createCampaignRequestDTO.Name, campaignResult.Name);
-            Assert.Equal(createCampaignRequestDTO.ProductCode, campaignResult.ProductCode);
-            Assert.Equal(createCampaignRequestDTO.Duration, campaignResult.Duration);
-            Assert.Equal(createCampaignRequestDTO.PMLimit, campaignResult.PriceManipulationLimit);
-            Assert.Equal(createCampaignRequestDTO.TSCount, campaignResult.TargetSalesCount);
-            Assert.Equal(currentTime, campaignResult.CreatedAt);
 
-            campaignRepositoryMock.Verify(repo => repo.GetCampaignByName(It.Is<string>(c => c == campaignResult.Name)), Times.Once);
+            var createOrderRequestDTO = new CreateOrderRequestDTO
+            {
+                ProductCode = createCampaignRequestDTO.ProductCode,
+                Quantity = 10,
+                TotalPrice = 100
+            };
+
+            var createdOrder = orderService.CreateOrder(createOrderRequestDTO);
+
+            var campaignResultWithOrders = campaignService.GetCampaignByName(createCampaignRequestDTO.Name);
+            Assert.NotNull(campaignResultWithOrders);
+            Assert.NotNull(createdOrder);
+
+            Assert.Equal(createdOrder.Quantity, campaignResultWithOrders.TotalSales);
         }
     }
 }

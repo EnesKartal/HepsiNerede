@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using HepsiNerede.Data.Entities;
+﻿using HepsiNerede.Data.Entities;
 using HepsiNerede.Data.Repositories;
 using HepsiNerede.Models.DTO.Product.CreateProduct;
 using HepsiNerede.Models.DTO.Product.GetActiveCampaignsAndDiscountPercentages;
