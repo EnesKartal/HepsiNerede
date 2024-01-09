@@ -66,16 +66,22 @@ namespace HepsiNerede.Services
             return _campaignRepository.CreateCampaign(newCampaign);
         }
 
-        private bool GetCampaignStatus(string name)
+        private string? GetCampaignStatus(string name)
         {
             var campaign = _campaignRepository.GetCampaignByName(name);
 
             if (campaign == null)
-                return false;
+                return null;
 
             var currentTime = _timeSimulationService.GetCurrentTime();
             var campaignEndTime = campaign.CreatedAt.AddHours(campaign.Duration);
-            return currentTime < campaignEndTime;
+            if(currentTime > campaignEndTime)
+                return Enum.GetName<CampaignStatus>(CampaignStatus.Ended);
+
+            if(currentTime < campaign.CreatedAt)
+                return Enum.GetName<CampaignStatus>(CampaignStatus.Incoming);
+
+            return Enum.GetName<CampaignStatus>(CampaignStatus.Active); 
         }
 
         public GetActiveCampaignsAndDiscountPercentagesDTO[] GetActiveCampaignsAndDiscountPercentages()
