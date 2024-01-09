@@ -5,10 +5,9 @@ namespace HepsiNerede.Data.Repositories
 {
     public interface IProductRepository
     {
-        Product? GetProductByCode(string productCode);
-        Product CreateProduct(Product product);
-        void DecreaseProductStock(string productCode, decimal quantity);
-        void DecreaseProductPrice(string productCode, decimal price);
+        Task<Product?> GetProductByCodeAsync(string productCode);
+        Task<Product> CreateProductAsync(Product product);
+        Task DecreaseProductStockAsync(string productCode, decimal quantity);
     }
 
     public class ProductRepository : IProductRepository
@@ -20,32 +19,28 @@ namespace HepsiNerede.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public Product? GetProductByCode(string productCode)
+        public async Task<Product?> GetProductByCodeAsync(string productCode)
         {
-            return _dbContext.Products
+            return await _dbContext.Products
             .AsNoTracking()
-            .FirstOrDefault(p => p.ProductCode == productCode);
+            .FirstOrDefaultAsync(p => p.ProductCode == productCode);
         }
 
-        public Product CreateProduct(Product product)
+        public async Task<Product> CreateProductAsync(Product product)
         {
-            _dbContext.Add(product);
-            _dbContext.SaveChanges();
+            await _dbContext.AddAsync(product);
+            await _dbContext.SaveChangesAsync();
             return product;
         }
 
-        public void DecreaseProductStock(string productCode, decimal quantity)
+        public async Task DecreaseProductStockAsync(string productCode, decimal quantity)
         {
-            var product = _dbContext.Products.FirstOrDefault(p => p.ProductCode == productCode);
-            product.Stock -= quantity;
-            _dbContext.SaveChanges();
-        }
+            var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.ProductCode == productCode);
+            if (product == null)
+                throw new Exception($"Product with code {productCode} not found.");
 
-        public void DecreaseProductPrice(string productCode, decimal discountPercentage)
-        {
-            var product = _dbContext.Products.FirstOrDefault(p => p.ProductCode == productCode);
-            product.Price -= product.Price * (discountPercentage / 100);
-            _dbContext.SaveChanges();
+            product.Stock -= quantity;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

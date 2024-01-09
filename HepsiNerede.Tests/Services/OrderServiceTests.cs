@@ -10,12 +10,12 @@ namespace HepsiNerede.Tests
     public class OrderServiceTests
     {
         [Fact]
-        public void CreateOrder_CreatesOrderCorrectly()
+        public async void CreateOrder_CreatesOrderCorrectly()
         {
             var dbContextMock = DBContextHelper.GetDbContext();
-            var orderRepository = new OrderRepository(dbContextMock); 
+            var orderRepository = new OrderRepository(dbContextMock);
             var orderRepositoryMock = new Mock<IOrderRepository>();
-            orderRepositoryMock.Setup(x => x.CreateOrder(It.IsAny<Order>())).Returns<Order>(orderRepository.CreateOrder);
+            orderRepositoryMock.Setup(x => x.CreateOrderAsync(It.IsAny<Order>())).Returns<Order>(orderRepository.CreateOrderAsync);
 
             var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
 
@@ -32,7 +32,7 @@ namespace HepsiNerede.Tests
 
             timeSimulationServiceMock.Setup(t => t.GetCurrentTime()).Returns(currentTime);
 
-            var createdOrder = orderService.CreateOrder(createOrderRequestDTO);
+            var createdOrder = await orderService.CreateOrderAsync(createOrderRequestDTO);
 
             Assert.NotNull(createdOrder);
             Assert.Equal(createOrderRequestDTO.ProductCode, createdOrder.ProductCode);
@@ -40,11 +40,11 @@ namespace HepsiNerede.Tests
             Assert.Equal(currentTime, createdOrder.CreatedAt);
             Assert.Equal(createOrderRequestDTO.TotalPrice, createdOrder.TotalPrice);
 
-            orderRepositoryMock.Verify(repo => repo.CreateOrder(It.Is<Order>(o => o == createdOrder)), Times.Once);
+            orderRepositoryMock.Verify(repo => repo.CreateOrderAsync(It.Is<Order>(o => o == createdOrder)), Times.Once);
         }
 
         [Fact]
-        public void GetOrdersForCampaignProduct_ShouldReturnOrders()
+        public async void GetOrdersForCampaignProduct_ShouldReturnOrders()
         {
             var orderRepositoryMock = new Mock<IOrderRepository>();
             var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
@@ -57,12 +57,11 @@ namespace HepsiNerede.Tests
             new Order { ProductCode = productCode, TotalPrice = 30.0m, Quantity = 1, CreatedAt = campaignEndTime.AddMinutes(-30) }
             };
 
-            orderRepositoryMock.Setup(x => x.GetOrdersForCampaignProduct(productCode, campaignEndTime))
-                              .Returns(orders);
+            orderRepositoryMock.Setup(x => x.GetOrdersForCampaignProductAsync(It.IsAny<string>(), It.IsAny<DateTime>())).ReturnsAsync(orders);
 
             var orderService = new OrderService(orderRepositoryMock.Object, timeSimulationServiceMock.Object);
 
-            var result = orderService.GetOrdersForCampaignProduct(productCode, campaignEndTime);
+            var result = await orderService.GetOrdersForCampaignProductAsync(productCode, campaignEndTime);
 
             Assert.NotNull(result);
             Assert.Equal(orders.Length, result.Length);

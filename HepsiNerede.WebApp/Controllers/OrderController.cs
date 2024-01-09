@@ -19,7 +19,7 @@ namespace HepsiNerede.WebApp.Controllers
         }
 
         [HttpPost("createOrder")]
-        public ActionResult<ApiResponse<CreateOrderResponseDTO>> CreateProduct([FromBody] CreateOrderRequestDTO order)
+        public async Task<ActionResult<ApiResponse<CreateOrderResponseDTO>>> CreateProductAsync([FromBody] CreateOrderRequestDTO order)
         {
             if (order == null)
                 return BadRequest("Order is required.");
@@ -30,7 +30,7 @@ namespace HepsiNerede.WebApp.Controllers
             if (order.Quantity <= 0)
                 return BadRequest("Quantity must be greater than 0.");
 
-            var product = _productService.GetProductByCode(order.ProductCode);
+            var product = await _productService.GetProductByCodeAsync(order.ProductCode);
             if (product == null)
                 return BadRequest("Product not found.");
 
@@ -42,9 +42,9 @@ namespace HepsiNerede.WebApp.Controllers
             order.TotalPrice = totalPrice;
 
             //TODO: Transaction
-            _productService.DecreaseProductStock(order.ProductCode, order.Quantity);
-           
-            var createdOrder = _orderService.CreateOrder(order);
+            await _productService.DecreaseProductStockAsync(order.ProductCode, order.Quantity);
+
+            var createdOrder = await _orderService.CreateOrderAsync(order);
 
             return Ok(new ApiResponse<CreateOrderResponseDTO>(new CreateOrderResponseDTO { Product = createdOrder.ProductCode, Quantity = createdOrder.Quantity }, message: "Order created"));
         }

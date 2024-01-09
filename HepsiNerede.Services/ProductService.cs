@@ -1,16 +1,14 @@
 ﻿using HepsiNerede.Data.Entities;
 using HepsiNerede.Data.Repositories;
 using HepsiNerede.Models.DTO.Product.CreateProduct;
-using HepsiNerede.Models.DTO.Product.GetActiveCampaignsAndDiscountPercentages;
 
 namespace HepsiNerede.Services
 {
     public interface IProductService
     {
-        Product? GetProductByCode(string productCode);
-        Product CreateProduct(CreateProductRequestDTO createProductDTO);
-        void DecreaseProductStock(string productCode, decimal quantity);
-        void DecraseProductPricesBulk(GetActiveCampaignsAndDiscountPercentagesDTO[] discounts);
+        Task<Product?> GetProductByCodeAsync(string productCode);
+        Task<Product> CreateProductAsync(CreateProductRequestDTO createProductDTO);
+        Task DecreaseProductStockAsync(string productCode, decimal quantity);
     }
 
     public class ProductService : IProductService
@@ -28,11 +26,11 @@ namespace HepsiNerede.Services
             _timeSimulationService = timeSimulationService;
         }
 
-        public Product? GetProductByCode(string productCode)
+        public async Task<Product?> GetProductByCodeAsync(string productCode)
         {
-            decimal discountPercentage = _campaignService.GetActiveCampaignDiscountPercentageForProduct(productCode);
-           
-            Product? product = _productRepository.GetProductByCode(productCode);
+            decimal discountPercentage = await _campaignService.GetActiveCampaignDiscountPercentageForProductAsync(productCode);
+
+            Product? product = await _productRepository.GetProductByCodeAsync(productCode);
 
             if (product != null && discountPercentage > 0)
                 product.Price = Math.Round(product.Price - (product.Price * discountPercentage), 4);
@@ -40,7 +38,7 @@ namespace HepsiNerede.Services
             return product;
         }
 
-        public Product CreateProduct(CreateProductRequestDTO createProductDTO)
+        public async Task<Product> CreateProductAsync(CreateProductRequestDTO createProductDTO)
         {
             var newProduct = new Product
             {
@@ -50,24 +48,12 @@ namespace HepsiNerede.Services
                 CreatedAt = _timeSimulationService.GetCurrentTime()
             };
 
-            return _productRepository.CreateProduct(newProduct);
+            return await _productRepository.CreateProductAsync(newProduct);
         }
 
-        public void DecreaseProductStock(string productCode, decimal quantity)
+        public async Task DecreaseProductStockAsync(string productCode, decimal quantity)
         {
-            _productRepository.DecreaseProductStock(productCode, quantity);
-        }
-
-        public void DecraseProductPricesBulk(GetActiveCampaignsAndDiscountPercentagesDTO[] discounts)
-        {
-            //TODO: Performance can be improved by using bulk update
-            foreach (var discount in discounts)
-                DecreaseProductPrice(discount.ProductCode, discount.DiscountPercentage);
-        }
-
-        private void DecreaseProductPrice(string productCode, decimal discountPercentage)
-        {
-            _productRepository.DecreaseProductPrice(productCode, discountPercentage);
+            await _productRepository.DecreaseProductStockAsync(productCode, quantity);
         }
     }
 }

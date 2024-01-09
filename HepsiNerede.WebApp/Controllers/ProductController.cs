@@ -18,12 +18,12 @@ namespace HepsiNerede.WebApp.Controllers
         }
 
         [HttpGet("getProductByCode")]
-        public ActionResult<ApiResponse<GetProductResponseDTO>> GetProductByCode([FromQuery] string? productCode)
+        public async Task<ActionResult<ApiResponse<GetProductResponseDTO>>> GetProductByCodeAsync([FromQuery] string? productCode)
         {
             if (string.IsNullOrEmpty(productCode))
                 return BadRequest("Product code is required.");
 
-            var product = _productService.GetProductByCode(productCode);
+            var product = await _productService.GetProductByCodeAsync(productCode);
 
             if (product == null)
                 return NotFound($"Product with code '{productCode}' not found.");
@@ -32,12 +32,12 @@ namespace HepsiNerede.WebApp.Controllers
         }
 
         [HttpPost("createProduct")]
-        public ActionResult<ApiResponse<CreateProductResponseDTO>> CreateProduct([FromBody] CreateProductRequestDTO product)
+        public async Task<ActionResult<ApiResponse<CreateProductResponseDTO>>> CreateProductAsync([FromBody] CreateProductRequestDTO product)
         {
             if (product == null)
                 return BadRequest("Product is required.");
 
-            var createdProduct = _productService.CreateProduct(product);
+            var createdProduct = await _productService.CreateProductAsync(product);
 
             return Ok(new ApiResponse<CreateProductResponseDTO>(new CreateProductResponseDTO { Price = createdProduct.Price, Code = createdProduct.ProductCode, Stock = createdProduct.Stock }, message: "Product created"));
         }

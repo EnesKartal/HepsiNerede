@@ -12,15 +12,15 @@ namespace HepsiNerede.Tests
     public class CampaignServiceTests
     {
         [Fact]
-        public void CreateCampaign_ShouldReturnCampaign()
+        public async void CreateCampaign_ShouldReturnCampaign()
         {
             var dbContextMock = DBContextHelper.GetDbContext();
             var campaignRepository = new CampaignRepository(dbContextMock);
 
             var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
             var campaignRepositoryMock = new Mock<ICampaignRepository>();
-            campaignRepositoryMock.Setup(x => x.CreateCampaign(It.IsAny<Campaign>()))
-                                 .Returns<Campaign>(campaign => campaignRepository.CreateCampaign(campaign));
+            campaignRepositoryMock.Setup(x => x.CreateCampaignAsync(It.IsAny<Campaign>()))
+                                 .Returns<Campaign>(campaign => campaignRepository.CreateCampaignAsync(campaign));
 
             var createCampaignRequestDTO = new CreateCampaignRequestDTO
             {
@@ -33,7 +33,7 @@ namespace HepsiNerede.Tests
 
             var currentTime = timeSimulationServiceMock.Object.GetCurrentTime();
 
-            var createdCampaign = campaignRepositoryMock.Object.CreateCampaign(new Campaign
+            var createdCampaign = await campaignRepositoryMock.Object.CreateCampaignAsync(new Campaign
             {
                 Name = createCampaignRequestDTO.Name,
                 ProductCode = createCampaignRequestDTO.ProductCode,
@@ -51,12 +51,12 @@ namespace HepsiNerede.Tests
             Assert.Equal(createCampaignRequestDTO.TSCount, createdCampaign.TargetSalesCount);
             Assert.Equal(currentTime, createdCampaign.CreatedAt);
 
-            campaignRepositoryMock.Verify(repo => repo.CreateCampaign(It.Is<Campaign>(c => c == createdCampaign)), Times.Once);
+            campaignRepositoryMock.Verify(repo => repo.CreateCampaignAsync(It.Is<Campaign>(c => c == createdCampaign)), Times.Once);
         }
 
 
         [Fact]
-        public void GetCampaign_ShouldReturnCampaignResponseDTO()
+        public async void GetCampaign_ShouldReturnCampaignResponseDTO()
         {
             var dbContextMock = DBContextHelper.GetDbContext();
             var campaignRepository = new CampaignRepository(dbContextMock);
@@ -75,7 +75,7 @@ namespace HepsiNerede.Tests
                 TSCount = 100
             };
 
-            var createdCampaign = campaignService.CreateCampaign(new CreateCampaignRequestDTO
+            var createdCampaign = await campaignService.CreateCampaignAsync(new CreateCampaignRequestDTO
             {
                 Duration = createCampaignRequestDTO.Duration,
                 Name = createCampaignRequestDTO.Name,
@@ -85,7 +85,7 @@ namespace HepsiNerede.Tests
             });
 
             Debug.WriteLine(createdCampaign.CreatedAt);
-            var campaignResult = campaignService.GetCampaignByName(createCampaignRequestDTO.Name);
+            var campaignResult = campaignService.GetCampaignByNameAsync(createCampaignRequestDTO.Name);
 
             Assert.NotNull(createdCampaign);
             Assert.NotNull(campaignResult);
@@ -97,9 +97,9 @@ namespace HepsiNerede.Tests
                 TotalPrice = 100
             };
 
-            var createdOrder = orderService.CreateOrder(createOrderRequestDTO);
+            var createdOrder = await orderService.CreateOrderAsync(createOrderRequestDTO);
 
-            var campaignResultWithOrders = campaignService.GetCampaignByName(createCampaignRequestDTO.Name);
+            var campaignResultWithOrders = await campaignService.GetCampaignByNameAsync(createCampaignRequestDTO.Name);
             Assert.NotNull(campaignResultWithOrders);
             Assert.NotNull(createdOrder);
 

@@ -5,10 +5,10 @@ namespace HepsiNerede.Data.Repositories
 {
     public interface ICampaignRepository
     {
-        Campaign? GetCampaignByName(string name);
-        Campaign CreateCampaign(Campaign product);
-        Campaign[] GetActiveCampaigns(DateTime simulatedDate);
-        Campaign? GetActiveCampaignForProduct(string productCode, DateTime simulatedDate);
+        Task<Campaign?> GetCampaignByNameAsync(string name);
+        Task<Campaign> CreateCampaignAsync(Campaign product);
+        Task<Campaign[]> GetActiveCampaignsAsync(DateTime simulatedDate);
+        Task<Campaign?> GetActiveCampaignForProductAsync(string productCode, DateTime simulatedDate);
     }
 
     public class CampaignRepository : ICampaignRepository
@@ -20,33 +20,33 @@ namespace HepsiNerede.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public Campaign? GetCampaignByName(string name)
+        public async Task<Campaign?> GetCampaignByNameAsync(string name)
         {
-            return _dbContext.Campaigns
+            return await _dbContext.Campaigns
             .AsNoTracking()
-            .FirstOrDefault(p => p.Name == name);
+            .FirstOrDefaultAsync(p => p.Name == name);
         }
 
-        public Campaign CreateCampaign(Campaign campaign)
+        public async Task<Campaign> CreateCampaignAsync(Campaign campaign)
         {
-            _dbContext.Campaigns.Add(campaign);
-            _dbContext.SaveChanges();
+            await _dbContext.Campaigns.AddAsync(campaign);
+            await _dbContext.SaveChangesAsync();
             return campaign;
         }
 
-        public Campaign[] GetActiveCampaigns(DateTime simulatedDate)
+        public async Task<Campaign[]> GetActiveCampaignsAsync(DateTime simulatedDate)
         {
-            return _dbContext.Campaigns
+            return await _dbContext.Campaigns
             .AsNoTracking()
             .Where(c => c.CreatedAt.AddHours(c.Duration) > simulatedDate)
-            .ToArray();
+            .ToArrayAsync();
         }
 
-        public Campaign? GetActiveCampaignForProduct(string productCode, DateTime simulatedDate)
+        public async Task<Campaign?> GetActiveCampaignForProductAsync(string productCode, DateTime simulatedDate)
         {
-            return _dbContext.Campaigns
+            return await _dbContext.Campaigns
             .AsNoTracking()
-            .FirstOrDefault(c => c.ProductCode == productCode && c.CreatedAt.AddHours(c.Duration) > simulatedDate);
+            .FirstOrDefaultAsync(c => c.ProductCode == productCode && c.CreatedAt.AddHours(c.Duration) > simulatedDate);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace HepsiNerede.WebApp.Controllers
         [HttpPost("increaseTime")]
         public ActionResult<ApiResponse> IncreaseHour(int hour)
         {
-            var increasedTime =  _timeSimulationService.IncreaseTime(hour);
+            var increasedTime = _timeSimulationService.IncreaseTime(hour);
             return Ok(new ApiResponse(message: $"Time is {increasedTime.ToShortTimeString()}"));
         }
     }

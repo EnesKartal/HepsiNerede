@@ -1,11 +1,12 @@
 ﻿using HepsiNerede.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace HepsiNerede.Data.Repositories
 {
     public interface IOrderRepository
     {
-        Order CreateOrder(Order product);
-        Order[] GetOrdersForCampaignProduct(string productCode, DateTime campaignEndTime);
+        Task<Order> CreateOrderAsync(Order product);
+        Task<Order[]> GetOrdersForCampaignProductAsync(string productCode, DateTime campaignEndTime);
     }
 
     public class OrderRepository : IOrderRepository
@@ -17,16 +18,16 @@ namespace HepsiNerede.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public Order CreateOrder(Order order)
+        public async Task<Order> CreateOrderAsync(Order order)
         {
-            _dbContext.Orders.Add(order);
-            _dbContext.SaveChanges();
+            await _dbContext.Orders.AddAsync(order);
+            await _dbContext.SaveChangesAsync();
             return order;
         }
 
-        public Order[] GetOrdersForCampaignProduct(string productCode, DateTime campaignEndTime)
+        public async Task<Order[]> GetOrdersForCampaignProductAsync(string productCode, DateTime campaignEndTime)
         {
-            return _dbContext.Orders.Where(x => x.ProductCode == productCode && x.CreatedAt <= campaignEndTime).ToArray();
+            return await _dbContext.Orders.Where(x => x.ProductCode == productCode && x.CreatedAt <= campaignEndTime).ToArrayAsync();
         }
     }
 }

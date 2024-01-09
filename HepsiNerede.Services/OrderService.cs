@@ -6,8 +6,8 @@ namespace HepsiNerede.Services
 {
     public interface IOrderService
     {
-        Order CreateOrder(CreateOrderRequestDTO createOrderRequestDTO);
-        Order[] GetOrdersForCampaignProduct(string productCode, DateTime campaignEndTime);
+        Task<Order> CreateOrderAsync(CreateOrderRequestDTO createOrderRequestDTO);
+        Task<Order[]> GetOrdersForCampaignProductAsync(string productCode, DateTime campaignEndTime);
     }
 
     public class OrderService : IOrderService
@@ -21,7 +21,7 @@ namespace HepsiNerede.Services
             _timeSimulationService = timeSimulationService;
         }
 
-        public Order CreateOrder(CreateOrderRequestDTO createOrderRequestDTO)
+        public async Task<Order> CreateOrderAsync(CreateOrderRequestDTO createOrderRequestDTO)
         {
             var newOrder = new Order
             {
@@ -31,12 +31,12 @@ namespace HepsiNerede.Services
                 TotalPrice = createOrderRequestDTO.TotalPrice
             };
 
-            return _orderRepository.CreateOrder(newOrder);
+            return await _orderRepository.CreateOrderAsync(newOrder);
         }
 
-        public Order[] GetOrdersForCampaignProduct(string productCode, DateTime campaignEndTime)
+        public async Task<Order[]> GetOrdersForCampaignProductAsync(string productCode, DateTime campaignEndTime)
         {
-            return _orderRepository.GetOrdersForCampaignProduct(productCode, campaignEndTime);
+            return await _orderRepository.GetOrdersForCampaignProductAsync(productCode, campaignEndTime);
         }
     }
 }

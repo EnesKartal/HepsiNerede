@@ -18,12 +18,12 @@ namespace HepsiNerede.WebApp.Controllers
         }
 
         [HttpGet("getCampaignByName")]
-        public ActionResult<ApiResponse<GetCampaignResponseDTO>> GetCampaignByName([FromQuery] string? name)
+        public async Task<ActionResult<ApiResponse<GetCampaignResponseDTO>>> GetCampaignByNameAsync([FromQuery] string? name)
         {
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Campaign name is required.");
 
-            var campaign = _campaignService.GetCampaignByName(name);
+            var campaign = await _campaignService.GetCampaignByNameAsync(name);
 
             if (campaign == null)
                 return NotFound($"Campaign with name '{name}' not found.");
@@ -32,12 +32,12 @@ namespace HepsiNerede.WebApp.Controllers
         }
 
         [HttpPost("createCampaign")]
-        public ActionResult<ApiResponse<CreateCampaignResponseDTO>> CreateProduct([FromBody] CreateCampaignRequestDTO campaign)
+        public async Task<ActionResult<ApiResponse<CreateCampaignResponseDTO>>> CreateProductAsync([FromBody] CreateCampaignRequestDTO campaign)
         {
             if (campaign == null)
                 return BadRequest("Campaign is required.");
 
-            var createdCampaign = _campaignService.CreateCampaign(campaign);
+            var createdCampaign = await _campaignService.CreateCampaignAsync(campaign);
 
             return Ok(new ApiResponse<CreateCampaignResponseDTO>(new CreateCampaignResponseDTO
             {

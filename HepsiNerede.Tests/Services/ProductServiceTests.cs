@@ -13,14 +13,14 @@ namespace HepsiNerede.Tests
     public class ProductServiceTests
     {
         [Fact]
-        public void CreateProduct_ShouldReturnProduct()
+        public async void CreateProduct_ShouldReturnProduct()
         {
             var dbContextMock = DBContextHelper.GetDbContext();
             var productRepository = new ProductRepository(dbContextMock);
 
             var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(x => x.CreateProduct(It.IsAny<Product>()))
-                                 .Returns<Product>(product => productRepository.CreateProduct(product));
+            productRepositoryMock.Setup(x => x.CreateProductAsync(It.IsAny<Product>()))
+                                 .Returns<Product>(product => productRepository.CreateProductAsync(product));
 
             var campaignServiceMock = new Mock<ICampaignService>();
             var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
@@ -35,7 +35,7 @@ namespace HepsiNerede.Tests
                 Stock = 50,
             };
 
-            var createdProduct = productService.CreateProduct(createProductRequestDTO);
+            var createdProduct = await productService.CreateProductAsync(createProductRequestDTO);
 
             Assert.NotNull(createdProduct);
             Assert.Equal(createProductRequestDTO.ProductCode, createdProduct.ProductCode);
@@ -43,21 +43,21 @@ namespace HepsiNerede.Tests
             Assert.Equal(createProductRequestDTO.Stock, createdProduct.Stock);
             Assert.Equal(currentTime, createdProduct.CreatedAt);
 
-            productRepositoryMock.Verify(repo => repo.CreateProduct(It.Is<Product>(p => p == createdProduct)), Times.Once);
+            productRepositoryMock.Verify(repo => repo.CreateProductAsync(It.Is<Product>(p => p == createdProduct)), Times.Once);
         }
 
         [Fact]
-        public void GetProduct_ShouldReturnProductResponseDTO()
+        public async void GetProduct_ShouldReturnProductResponseDTO()
         {
             var dbContextMock = DBContextHelper.GetDbContext();
             var productRepository = new ProductRepository(dbContextMock);
 
             var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(x => x.GetProductByCode(It.IsAny<string>()))
-                                 .Returns<string>(productCode => productRepository.GetProductByCode(productCode));
+            productRepositoryMock.Setup(x => x.GetProductByCodeAsync(It.IsAny<string>()))
+                                 .Returns<string>(productCode => productRepository.GetProductByCodeAsync(productCode));
 
-            productRepositoryMock.Setup(x => x.CreateProduct(It.IsAny<Product>()))
-                                 .Returns<Product>(product => productRepository.CreateProduct(product));
+            productRepositoryMock.Setup(x => x.CreateProductAsync(It.IsAny<Product>()))
+                                 .Returns<Product>(product => productRepository.CreateProductAsync(product));
 
             var campaignServiceMock = new Mock<ICampaignService>();
             var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
@@ -72,9 +72,9 @@ namespace HepsiNerede.Tests
                 Stock = 50,
             };
 
-            var createdProduct = productService.CreateProduct(createProductRequestDTO);
+            var createdProduct = await productService.CreateProductAsync(createProductRequestDTO);
 
-            var productResult = productRepositoryMock.Object.GetProductByCode(createProductRequestDTO.ProductCode);
+            var productResult = await productRepositoryMock.Object.GetProductByCodeAsync(createProductRequestDTO.ProductCode);
 
             Assert.NotNull(productResult);
             Assert.NotNull(createdProduct);
@@ -83,11 +83,11 @@ namespace HepsiNerede.Tests
             Assert.Equal(createProductRequestDTO.Stock, productResult.Stock);
             Assert.Equal(currentTime, productResult.CreatedAt);
 
-            productRepositoryMock.Verify(repo => repo.GetProductByCode(It.Is<string>(p => p == createProductRequestDTO.ProductCode)), Times.Once);
+            productRepositoryMock.Verify(repo => repo.GetProductByCodeAsync(It.Is<string>(p => p == createProductRequestDTO.ProductCode)), Times.Once);
         }
 
         [Fact]
-        public void GetProductWithDiscount_ShouldReturnProductResponseDTO()
+        public async void GetProductWithDiscount_ShouldReturnProductResponseDTO()
         {
             var dbContextMock = DBContextHelper.GetDbContext();
             var productRepository = new ProductRepository(dbContextMock);
@@ -97,16 +97,16 @@ namespace HepsiNerede.Tests
 
             var productRepositoryMock = new Mock<IProductRepository>();
 
-            productRepositoryMock.Setup(x => x.GetProductByCode(It.IsAny<string>()))
-                                 .Returns<string>(productCode => productRepository.GetProductByCode(productCode));
+            productRepositoryMock.Setup(x => x.GetProductByCodeAsync(It.IsAny<string>()))
+                                 .Returns<string>(productCode => productRepository.GetProductByCodeAsync(productCode));
 
-            productRepositoryMock.Setup(x => x.CreateProduct(It.IsAny<Product>()))
-                                 .Returns<Product>(product => productRepository.CreateProduct(product));
+            productRepositoryMock.Setup(x => x.CreateProductAsync(It.IsAny<Product>()))
+                                 .Returns<Product>(product => productRepository.CreateProductAsync(product));
 
             var campaignServiceMock = new Mock<ICampaignService>();
-            campaignServiceMock.Setup(x => x.CreateCampaign(It.IsAny<CreateCampaignRequestDTO>()))
+            campaignServiceMock.Setup(x => x.CreateCampaignAsync(It.IsAny<CreateCampaignRequestDTO>()))
                 .Returns<CreateCampaignRequestDTO>(createCampaignDTO =>
-                    campaignRepository.CreateCampaign(new Campaign
+                    campaignRepository.CreateCampaignAsync(new Campaign
                     {
                         Name = createCampaignDTO.Name,
                         ProductCode = createCampaignDTO.ProductCode,
@@ -116,23 +116,22 @@ namespace HepsiNerede.Tests
                         CreatedAt = timeSimulationServiceMock.Object.GetCurrentTime()
                     })
                 );
-            campaignServiceMock.Setup(x => x.GetCampaignByName(It.IsAny<string>()))
-                .Returns<string>(campaignName =>
+            campaignServiceMock.Setup(x => x.GetCampaignByNameAsync(It.IsAny<string>()))
+                .Returns<string>(async campaignName =>
                 {
-                    var campaign = campaignRepository.GetCampaignByName(campaignName);
+                    var campaign = await campaignRepository.GetCampaignByNameAsync(campaignName);
                     if (campaign == null)
                         return null;
                     return new GetCampaignResponseDTO
                     {
                         TargetSales = campaign.TargetSalesCount
                     };
-                }
-                );
+                });
 
-            campaignServiceMock.Setup(x => x.GetActiveCampaignsAndDiscountPercentages())
-                .Returns(() =>
+            campaignServiceMock.Setup(x => x.GetActiveCampaignsAndDiscountPercentagesAsync())
+                .Returns(async () =>
                 {
-                    var campaigns = campaignRepository.GetActiveCampaigns(timeSimulationServiceMock.Object.GetCurrentTime());
+                    var campaigns = await campaignRepository.GetActiveCampaignsAsync(timeSimulationServiceMock.Object.GetCurrentTime());
                     var campaignDiscountPercentages = new GetActiveCampaignsAndDiscountPercentagesDTO[campaigns.Length];
                     for (int i = 0; i < campaigns.Length; i++)
                     {
@@ -145,10 +144,10 @@ namespace HepsiNerede.Tests
                     return campaignDiscountPercentages;
                 });
 
-            campaignServiceMock.Setup(x => x.GetActiveCampaignDiscountPercentageForProduct(It.IsAny<string>()))
-                .Returns<string>(productCode =>
+            campaignServiceMock.Setup(x => x.GetActiveCampaignDiscountPercentageForProductAsync(It.IsAny<string>()))
+                .Returns<string>(async productCode =>
                 {
-                    var campaign = campaignRepository.GetActiveCampaignForProduct(productCode, timeSimulationServiceMock.Object.GetCurrentTime());
+                    var campaign = await campaignRepository.GetActiveCampaignForProductAsync(productCode, timeSimulationServiceMock.Object.GetCurrentTime());
                     if (campaign == null)
                         return 0;
                     return campaignServiceMock.Object.GetDiscountPercentage(campaign);
@@ -190,13 +189,13 @@ namespace HepsiNerede.Tests
                 TSCount = 100
             };
 
-            var createdProduct = productService.CreateProduct(createProductRequestDTO);
-            var createdCampaign = campaignServiceMock.Object.CreateCampaign(createCampaignRequestDTO);
+            var createdProduct = await productService.CreateProductAsync(createProductRequestDTO);
+            var createdCampaign = await campaignServiceMock.Object.CreateCampaignAsync(createCampaignRequestDTO);
 
-            var campaignResult = campaignServiceMock.Object.GetCampaignByName(createCampaignRequestDTO.Name);
+            var campaignResult = await campaignServiceMock.Object.GetCampaignByNameAsync(createCampaignRequestDTO.Name);
             Assert.NotNull(campaignResult);
 
-            var productResult = productService.GetProductByCode(createProductRequestDTO.ProductCode);
+            var productResult = await productService.GetProductByCodeAsync(createProductRequestDTO.ProductCode);
 
             Assert.NotNull(createdProduct);
             Assert.NotNull(productResult);
@@ -206,7 +205,7 @@ namespace HepsiNerede.Tests
 
             timeSimulationServiceMock.Setup(t => t.GetCurrentTime()).Returns(timeSimulationServiceMock.Object.GetCurrentTime().AddHours(3));
 
-            var productResultWithDiscount = productService.GetProductByCode(createProductRequestDTO.ProductCode);
+            var productResultWithDiscount = await productService.GetProductByCodeAsync(createProductRequestDTO.ProductCode);
 
             Assert.NotNull(productResultWithDiscount);
             Assert.Equal(createProductRequestDTO.ProductCode, productResultWithDiscount.ProductCode);
@@ -215,7 +214,7 @@ namespace HepsiNerede.Tests
 
             timeSimulationServiceMock.Setup(t => t.GetCurrentTime()).Returns(timeSimulationServiceMock.Object.GetCurrentTime().AddHours(7));
 
-            var productResultWithoutDiscount = productService.GetProductByCode(createProductRequestDTO.ProductCode);
+            var productResultWithoutDiscount = await productService.GetProductByCodeAsync(createProductRequestDTO.ProductCode);
 
             Assert.NotNull(productResultWithoutDiscount);
             Assert.Equal(createProductRequestDTO.ProductCode, productResultWithoutDiscount.ProductCode);
