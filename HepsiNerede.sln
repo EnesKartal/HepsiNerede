@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.WebApp", "HepsiNerede.WebApp\HepsiNerede.WebApp.csproj", "{5A3E6970-F210-40D6-BD56-C2C45E92EF13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.WebApp", "src\HepsiNerede.WebApp\HepsiNerede.WebApp.csproj", "{5A3E6970-F210-40D6-BD56-C2C45E92EF13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.Tests", "HepsiNerede.Tests\HepsiNerede.Tests.csproj", "{B4C58F08-3746-45CC-ABFB-A769BCA72DB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.Tests", "src\HepsiNerede.Tests\HepsiNerede.Tests.csproj", "{B4C58F08-3746-45CC-ABFB-A769BCA72DB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HepsiNerede.Data", "HepsiNerede.Data\HepsiNerede.Data.csproj", "{6584B7EB-F2A1-4087-99CD-6C2CD9FDF3A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.Domain", "src\HepsiNerede.Domain\HepsiNerede.Domain.csproj", "{6584B7EB-F2A1-4087-99CD-6C2CD9FDF3A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HepsiNerede.Services", "HepsiNerede.Services\HepsiNerede.Services.csproj", "{440D3A32-DCB5-47EE-B546-0B7DF60C14CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HepsiNerede.Infrastructure", "src\HepsiNerede.Infrastructure\HepsiNerede.Infrastructure.csproj", "{683CE51B-A1CA-4529-9841-E77E396BBDDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HepsiNerede.Models", "HepsiNerede.Models\HepsiNerede.Models.csproj", "{9ACD7D0B-495D-44DC-9D42-AED15661A1F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HepsiNerede.Application", "src\HepsiNerede.Application\HepsiNerede.Application.csproj", "{46B90E72-F148-4899-BE60-AF2FE272841B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +31,14 @@ Global
 		{6584B7EB-F2A1-4087-99CD-6C2CD9FDF3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6584B7EB-F2A1-4087-99CD-6C2CD9FDF3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6584B7EB-F2A1-4087-99CD-6C2CD9FDF3A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{440D3A32-DCB5-47EE-B546-0B7DF60C14CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{440D3A32-DCB5-47EE-B546-0B7DF60C14CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{440D3A32-DCB5-47EE-B546-0B7DF60C14CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{440D3A32-DCB5-47EE-B546-0B7DF60C14CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9ACD7D0B-495D-44DC-9D42-AED15661A1F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9ACD7D0B-495D-44DC-9D42-AED15661A1F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9ACD7D0B-495D-44DC-9D42-AED15661A1F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9ACD7D0B-495D-44DC-9D42-AED15661A1F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{683CE51B-A1CA-4529-9841-E77E396BBDDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683CE51B-A1CA-4529-9841-E77E396BBDDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683CE51B-A1CA-4529-9841-E77E396BBDDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683CE51B-A1CA-4529-9841-E77E396BBDDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B90E72-F148-4899-BE60-AF2FE272841B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B90E72-F148-4899-BE60-AF2FE272841B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B90E72-F148-4899-BE60-AF2FE272841B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B90E72-F148-4899-BE60-AF2FE272841B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
