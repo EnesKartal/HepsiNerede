@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-builder.Services.AddDbContext<HepsiNeredeDBContext>(options =>
+builder.Services.AddDbContext<HepsiNeredeDbContext>(options =>
 {
     var hepsiNeredeConnectionString = configuration.GetConnectionString("HepsiNeredeDBContext");
     options.UseSqlite(hepsiNeredeConnectionString);
@@ -54,7 +54,7 @@ app.UseErrorHandlingMiddleware();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<HepsiNeredeDBContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<HepsiNeredeDbContext>();
     dbContext.Database.EnsureCreated();
 }
 
