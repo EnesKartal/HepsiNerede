@@ -17,6 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{84F4D562-FBB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AD9FB9D-EDA4-4618-961B-F15DB82C80A4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{213248C6-6BFE-4980-8834-D3794AA87001}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		run_app.bat = run_app.bat
+		run_tests.bat = run_tests.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

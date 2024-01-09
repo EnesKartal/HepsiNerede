@@ -1,2 +1,2 @@
-dotnet test .\src\HepsiNerede.Tests\HepsiNerede.Tests.csproj -v:n
+dotnet test .\tests\HepsiNerede.Tests\HepsiNerede.Tests.csproj -v:n
 PAUSE

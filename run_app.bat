@@ -1,1 +1,1 @@
-dotnet run --project ./src/HepsiNerede.WebApp/HepsiNerede.WebApp.csproj | start chrome http://localhost:5041
+start chrome http://localhost:5041 | dotnet run --project ./src/HepsiNerede.WebApp/HepsiNerede.WebApp.csproj 
