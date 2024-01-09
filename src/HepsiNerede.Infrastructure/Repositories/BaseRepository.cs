@@ -1,6 +1,5 @@
 ﻿using HepsiNerede.Domain.Aggregates.Base;
 using HepsiNerede.Infrastructure.DbContexts;
-using System.Threading.Tasks;
 
 namespace HepsiNerede.Infrastructure.Repositories
 {
