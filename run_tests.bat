@@ -1,2 +1,2 @@
-dotnet test .\tests\HepsiNerede.Tests\HepsiNerede.Tests.csproj --logger "console;verbosity=detailed"
+dotnet restore | dotnet test .\tests\HepsiNerede.Tests\HepsiNerede.Tests.csproj --logger "console;verbosity=detailed"
 PAUSE
