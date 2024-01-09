@@ -43,7 +43,6 @@ namespace HepsiNerede.WebApp.Controllers
 
             //TODO: Transaction
             _productService.DecreaseProductStock(order.ProductCode, order.Quantity);
-
            
             var createdOrder = _orderService.CreateOrder(order);
 
