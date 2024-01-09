@@ -26,7 +26,6 @@ namespace HepsiNerede.Tests
             productRepositoryMock.Setup(x => x.CreateProductAsync(It.IsAny<Product>()))
                                  .Returns<Product>(product => productRepository.CreateProductAsync(product));
 
-            var campaignServiceMock = new Mock<ICampaignService>();
             var timeSimulationServiceMock = new Mock<ITimeSimulationService>();
             var productService = new ProductService(productRepositoryMock.Object, timeSimulationServiceMock.Object);
 
