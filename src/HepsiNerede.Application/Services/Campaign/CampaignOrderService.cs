@@ -3,22 +3,43 @@ using HepsiNerede.Application.Services.Order;
 
 namespace HepsiNerede.Application.Services.Campaign
 {
+    /// <summary>
+    /// Service for handling operations related to campaigns and orders.
+    /// </summary>
     public interface ICampaignOrderService
     {
+        /// <summary>
+        /// Gets campaign details by name asynchronously.
+        /// </summary>
+        /// <param name="name">The name of the campaign to retrieve.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the campaign details.</returns>
         Task<GetCampaignResponseDTO?> GetCampaignByNameAsync(string name);
     }
 
+    /// <summary>
+    /// Implementation of <see cref="ICampaignOrderService"/> for handling operations related to campaigns and orders.
+    /// </summary>
     public class CampaignOrderService : ICampaignOrderService
     {
         private readonly ICampaignService _campaignService;
         private readonly IOrderService _orderService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CampaignOrderService"/> class.
+        /// </summary>
+        /// <param name="campaignService">The campaign service dependency.</param>
+        /// <param name="orderService">The order service dependency.</param>
         public CampaignOrderService(ICampaignService campaignService, IOrderService orderService)
         {
             _campaignService = campaignService;
             _orderService = orderService;
         }
 
+        /// <summary>
+        /// Gets campaign details by name asynchronously.
+        /// </summary>
+        /// <param name="name">The name of the campaign to retrieve.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the campaign details.</returns>
         public async Task<GetCampaignResponseDTO?> GetCampaignByNameAsync(string name)
         {
             var campaign = await _campaignService.GetCampaignByNameAsync(name);
