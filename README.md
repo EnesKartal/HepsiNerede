@@ -31,11 +31,11 @@ cd HepsiNerede
 You can run application for WebUI with Swagger Tool
 
 ```bash
-run_app.bat
+start run_app.bat
 ```
 
 Or you can run test scenarios
 
 ```bash
-run_tests.bat
+start run_tests.bat
 ```

@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.WebApp", "src\HepsiNerede.WebApp\HepsiNerede.WebApp.csproj", "{5A3E6970-F210-40D6-BD56-C2C45E92EF13}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.Tests", "tests\HepsiNerede.Tests\HepsiNerede.Tests.csproj", "{B4C58F08-3746-45CC-ABFB-A769BCA72DB7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.Domain", "src\HepsiNerede.Domain\HepsiNerede.Domain.csproj", "{6584B7EB-F2A1-4087-99CD-6C2CD9FDF3A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.Infrastructure", "src\HepsiNerede.Infrastructure\HepsiNerede.Infrastructure.csproj", "{683CE51B-A1CA-4529-9841-E77E396BBDDA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.Application", "src\HepsiNerede.Application\HepsiNerede.Application.csproj", "{46B90E72-F148-4899-BE60-AF2FE272841B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.WebApp", "src\HepsiNerede.WebApp\HepsiNerede.WebApp.csproj", "{5A3E6970-F210-40D6-BD56-C2C45E92EF13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HepsiNerede.Tests", "tests\HepsiNerede.Tests\HepsiNerede.Tests.csproj", "{B4C58F08-3746-45CC-ABFB-A769BCA72DB7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{84F4D562-FBB3-4888-8581-48FDB33A23A0}"
 EndProject
