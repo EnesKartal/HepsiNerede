@@ -11,9 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="HepsiNerede.Domain">
-      <HintPath>..\HepsiNerede.Domain\obj\Debug\net8.0\ref\HepsiNerede.Domain.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\HepsiNerede.Domain\HepsiNerede.Domain.csproj" />
   </ItemGroup>
 
 </Project>
