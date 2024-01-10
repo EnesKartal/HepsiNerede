@@ -9,7 +9,14 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-echo "Launching the application..."
+echo "Building and launching the application..."
+dotnet build
+if %ERRORLEVEL% neq 0 (
+    echo "Error building the application. Exiting."
+    PAUSE
+    exit /b 1
+)
+
 start chrome http://localhost:5041
 dotnet run --project ./src/HepsiNerede.WebApp/HepsiNerede.WebApp.csproj
 
