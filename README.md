@@ -15,6 +15,7 @@ This project implements a campaign module for an e-commerce platform, allowing m
 
 Before running the project, ensure you have the following installed:
 
+Windows OS
 .NET 8 SDK
 
 ### Installation
